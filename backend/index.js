@@ -4,8 +4,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
+//middleware - parse the json data
+app.use(express.json());
+
 
 const userRouter = require("./routes/user.route");
+const authRouter = require("./routes/auth.route")
 
 Port = 4000;
 
@@ -24,3 +28,4 @@ mongoose.connect(process.env.DB_URL)
 
 
 app.use("/api/user",userRouter);
+app.use("/api/auth",authRouter);
