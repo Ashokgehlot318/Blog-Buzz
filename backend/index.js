@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
+
+const userRouter = require("./routes/user.route");
+
 Port = 4000;
 
 app.listen(Port, () => {
@@ -17,4 +20,7 @@ mongoose.connect(process.env.DB_URL)
     .catch(error => {
         console.log("mongoDB is facing issue...");
         console.log(error);
-    })
+    });
+
+
+app.use("/api/user",userRouter);
