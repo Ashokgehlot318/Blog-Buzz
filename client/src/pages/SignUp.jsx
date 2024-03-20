@@ -1,8 +1,58 @@
-import { Button, Label, TextInput } from 'flowbite-react'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
+import React, { useState } from 'react'
+import { Link,useNavigate } from 'react-router-dom'
 
 const SignUp = () => {
+
+  const [formData,setFormData] = useState({});
+  const [loading,setLoading] = useState(false);
+  const [errorMessage,setErrorMessage] = useState(null);
+
+  const navigate = useNavigate();
+  const changeHandler = (event)=>{
+    setFormData({...formData,
+      [event.target.id]: event.target.value.trim()
+    })
+  }
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage("Please fill out all fields...");
+    }
+  
+    try {
+
+      setErrorMessage(null);
+      setLoading(true);
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+  
+      if (!res.ok) {
+        // If response is not ok, throw an error
+        throw new Error('Failed to sign up. May be duplicate key error (with same name or email already sign up)');
+      }
+  
+      const data = await res.json();
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      setErrorMessage(null);
+      setLoading(false);
+      navigate('/sign-in');
+    } catch (error) {
+      // Handle fetch errors
+      // console.error('Error signing up:', error);
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
+  };
+  
+
+
   return (
     <div className='min-h-screen mt-20'>
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
@@ -16,27 +66,34 @@ const SignUp = () => {
             Buzz
         </Link>
 
-        <p className='text-sm mt-5'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex fugit molestias molestiae magni delectus excepturi sapiente deserunt dolor eveniet maiores beatae </p>
+        <p className='text-sm mt-5'>Inspire and be inspired. Dive into Blog Buzz – where minds meet and ideas spark. </p>
         </div>
 
         {/* right part  */}
         <div className="flex-1">
-          <form className='flex flex-col gap-4'>
+          <form className='flex flex-col gap-4' onSubmit={submitHandler}>
             <div >
               <Label value='your username'></Label>
-              <TextInput type='text' placeholder='username' id='username'></TextInput>
+              <TextInput type='text' placeholder='username' id='username' onChange={changeHandler}></TextInput>
             </div>
             <div >
               <Label value='your email'></Label>
-              <TextInput type='text' placeholder='Email' id='email'></TextInput>
+              <TextInput type='text' placeholder='Email' id='email' onChange={changeHandler}></TextInput>
             </div>
             <div >
               <Label value='your password'></Label>
-              <TextInput type='password' placeholder='password' id='password'></TextInput>
+              <TextInput type='password' placeholder='password' id='password' onChange={changeHandler}></TextInput>
             </div>
 
-            <Button gradientDuoTone='purpleToPink'  type='submit'>
-              Sign Up
+            <Button gradientDuoTone='purpleToPink'  type='submit' disabled={loading}>
+              {
+                loading ? (
+                  <>
+                    <Spinner size='sm' />
+                    <span className='pl-3'>Loading...</span>
+                  </>
+                ) : 'Sign Up'
+              }
             </Button>
           </form>
 
@@ -44,6 +101,13 @@ const SignUp = () => {
             <span>Have an account?</span>
             <Link to='/sign-in' className='text-blue-700 font-semibold'>Sign In</Link>
           </div>
+          {
+            errorMessage && (
+              <Alert className='mt-5' color='failure'>
+                {errorMessage}
+              </Alert>
+            )
+          }
         </div>
       </div>
 
