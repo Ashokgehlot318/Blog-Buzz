@@ -1,12 +1,17 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
-import { Link,useNavigate } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector} from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 
 const SignIn = () => {
 
   const [formData,setFormData] = useState({});
-  const [loading,setLoading] = useState(false);
-  const [errorMessage,setErrorMessage] = useState(null);
+  // const [loading,setLoading] = useState(false);
+  // const [errorMessage,setErrorMessage] = useState(null);
+
+  const dispatch = useDispatch();
+  const {loading, error: errorMessage} = useSelector( state => state.user);
 
   const navigate = useNavigate();
   const changeHandler = (event)=>{
@@ -18,13 +23,12 @@ const SignIn = () => {
   const submitHandler = async (event) => {
     event.preventDefault();
     if (!formData.email || !formData.password) {
-      return setErrorMessage("Please fill out all fields...");
+      return dispatch(signInFailure("Please fill out all fields..."));
     }
   
     try {
 
-      setErrorMessage(null);
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,21 +37,24 @@ const SignIn = () => {
   
       if (!res.ok) {
         // If response is not ok, throw an error
-        throw new Error('Failed to sign up. May be duplicate key error (with same name or email already sign up)');
+        throw new Error('User not found');
       }
   
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));
       }
-      setErrorMessage(null);
-      setLoading(false);
+      
+      dispatch(signInSuccess(data))
+
       navigate('/');
+
     } catch (error) {
       // Handle fetch errors
       // console.error('Error signing up:', error);
-      setErrorMessage(error.message);
-      setLoading(false);
+      // setErrorMessage(error.message);
+      // setLoading(false);
+      dispatch(signInFailure(error.message))
     }
   };
   
