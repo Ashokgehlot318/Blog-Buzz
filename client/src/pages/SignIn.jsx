@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector} from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
+import GoogleAuth from '../components/GoogleAuth';
 
 const SignIn = () => {
 
@@ -45,7 +46,7 @@ const SignIn = () => {
         dispatch(signInFailure(data.message));
       }
       
-      dispatch(signInSuccess(data))
+      dispatch(signInSuccess(data));
 
       navigate('/');
 
@@ -98,6 +99,7 @@ const SignIn = () => {
                 ) : 'Sign In'
               }
             </Button>
+           <GoogleAuth />
           </form>
 
           <div className="flex gap-2 mt-5 text-sm">

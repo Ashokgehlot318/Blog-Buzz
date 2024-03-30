@@ -1,12 +1,17 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
-import { Link,useNavigate } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom';
+import  GoogleAuth  from '../components/GoogleAuth';
+import { useDispatch, useSelector} from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 
 const SignUp = () => {
 
   const [formData,setFormData] = useState({});
-  const [loading,setLoading] = useState(false);
-  const [errorMessage,setErrorMessage] = useState(null);
+  // const [loading,setLoading] = useState(false);
+  // const [errorMessage,setErrorMessage] = useState(null);
+  const dispatch = useDispatch();
+  const {loading, error: errorMessage} = useSelector( state => state.user);
 
   const navigate = useNavigate();
   const changeHandler = (event)=>{
@@ -22,7 +27,7 @@ const SignUp = () => {
     }
   
     try {
-
+      dispatch(signInStart());
       setErrorMessage(null);
       setLoading(true);
       const res = await fetch('/api/auth/signup', {
@@ -38,16 +43,18 @@ const SignUp = () => {
   
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));
       }
-      setErrorMessage(null);
-      setLoading(false);
+      // setErrorMessage(null);
+      // setLoading(false);
+      dispatch(signInSuccess(data));
       navigate('/sign-in');
     } catch (error) {
       // Handle fetch errors
       // console.error('Error signing up:', error);
-      setErrorMessage(error.message);
-      setLoading(false);
+      // setErrorMessage(error.message);
+      // setLoading(false);
+      dispatch(signInFailure(data.message));
     }
   };
   
@@ -95,7 +102,9 @@ const SignUp = () => {
                 ) : 'Sign Up'
               }
             </Button>
+            <GoogleAuth />
           </form>
+
 
           <div className="flex gap-2 mt-5 text-sm">
             <span>Have an account?</span>
