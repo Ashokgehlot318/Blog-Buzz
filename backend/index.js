@@ -2,21 +2,23 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 dotenv.config();
 
 //middleware - parse the json data
 app.use(express.json());
+app.use(cookieParser());
 
 // Middleware for handling errors
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
-    const message = err.message || "Internal server error";
-    return res.status(statusCode).json({
-        success: false,
-        statusCode,
-        message
+    const message = err.message || 'Internal Server Error';
+    res.status(statusCode).json({
+      success: false,
+      statusCode,
+      message,
     });
-});
+  });
 
 
 const userRouter = require("./routes/user.route");

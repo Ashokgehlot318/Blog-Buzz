@@ -17,7 +17,7 @@ const DashboardProfile = () => {
     const [imageFileUploadError, setImageFileUploadError] = useState(null);
     const [imageFileUploading, setImageFileUploading] = useState(false);
 
-    console.log(imageFileUploadProgress, imageFileUploadError);
+    // console.log(imageFileUploadProgress, imageFileUploadError);
     const imageChangeHandler = (event)=>{
         const file = event.target.files[0]
         if(file){
@@ -30,7 +30,7 @@ const DashboardProfile = () => {
         imageUpload();
     },[imageFile]);
 
-    console.log(imageFile);
+    // console.log(imageFile);
 
     const imageUpload = async () => {
         if(!imageFile) return;
@@ -50,7 +50,7 @@ const DashboardProfile = () => {
           },
           (error) => {
             setImageFileUploadError(
-              'Could not upload image (File must be less than 2MB)'
+              '** File must be less than 2MB'
             );
             setImageFileUploadProgress(null);
             setImageFile(null);
