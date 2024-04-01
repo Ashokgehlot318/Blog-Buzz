@@ -1,11 +1,13 @@
 import { Alert, Button, TextInput } from 'flowbite-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector} from'react-redux';
+import { useDispatch, useSelector} from'react-redux';
 import {getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {app} from '../firebase';
 
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import {updateStart, updateSuccess, updateFailure} from '../redux/user/userSlice';
+
 
 const DashboardProfile = () => {
 
@@ -16,6 +18,10 @@ const DashboardProfile = () => {
     const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
     const [imageFileUploadError, setImageFileUploadError] = useState(null);
     const [imageFileUploading, setImageFileUploading] = useState(false);
+    const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+    const [updateUserError, setUpdateUserError] = useState(null);
+    const [formData, setFormData] = useState({});
+    const dispatch = useDispatch();
 
     // console.log(imageFileUploadProgress, imageFileUploadError);
     const imageChangeHandler = (event)=>{
@@ -52,6 +58,7 @@ const DashboardProfile = () => {
             setImageFileUploadError(
               '** File must be less than 2MB'
             );
+            setUpdateUserError('** File must be less than 2MB');
             setImageFileUploadProgress(null);
             setImageFile(null);
             setImageFileUrl(null);
@@ -60,7 +67,7 @@ const DashboardProfile = () => {
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
               setImageFileUrl(downloadURL);
-            //   setFormData({ ...formData, profilePicture: downloadURL });
+              setFormData({ ...formData, profilePicture: downloadURL });
               setImageFileUploading(false);
             });
           }
@@ -79,10 +86,53 @@ const DashboardProfile = () => {
     //     }
     //   }
 
+
+    const changeHandler = (event) =>{
+      setFormData({...formData,  [event.target.id]: event.target.value});
+    }
+
+    const submitHandler = async (event) =>{
+      event.preventDefault();
+      setUpdateUserSuccess(null);
+      setUpdateUserError(null);
+      if(Object.keys(formData).length===0){
+        setUpdateUserError("No changes made")
+        return;
+      }
+
+      if(imageFileUploading){
+        setUpdateUserError("please wait for image upload")
+        return;
+      }
+
+      try{
+        dispatch(updateStart());
+        const res = await fetch(`/api/user/update/${currentUser._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          dispatch(updateFailure(data.message));
+          setUpdateUserError(data.message);
+        } else {
+          dispatch(updateSuccess(data));
+          setUpdateUserSuccess("User's profile updated successfully");
+        }
+      } catch (error) {
+        dispatch(updateFailure(error.message));
+        // setUpdateUserError("Not updated, Please try again");
+      }
+    }
+
+
   return (
     <div className='max-w-lg mx-auto w-full min-h-screen mt-3 md:-mt-16'>
         <h1 className='pb-10 text-center font-semibold text-3xl'>Profile</h1>
-        <form className='flex flex-col gap-4'>
+        <form className='flex flex-col gap-4' onSubmit={submitHandler}>
             <input type='file' accept='image/*' hidden onChange={imageChangeHandler} ref={profileRef}></input>
 
             <div className=" relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full" onClick={() => profileRef.current.click()}>
@@ -123,16 +173,19 @@ const DashboardProfile = () => {
             type='text'
             id='username'
             placeholder='username'
-            defaultValue={currentUser.username}/>
+            defaultValue={currentUser.username} 
+            onChange={changeHandler}/>
             <TextInput 
             type='email'
             id='email'
             placeholder='email'
-            defaultValue={currentUser.email}/>
+            defaultValue={currentUser.email} 
+            onChange={changeHandler}/>
             <TextInput 
             type='password'
             id='password'
-            placeholder='password'
+            placeholder='password' 
+            onChange={changeHandler}
             />
 
             <Button type='submit' gradientDuoTone='purpleToBlue' outline>
@@ -143,6 +196,18 @@ const DashboardProfile = () => {
             <span className='cursor-pointer'>Delete account</span>
             <span className='cursor-pointer'>Sign Out</span>
         </div>
+        {updateUserSuccess && (
+        <Alert color='success' className='mt-5'>
+          {updateUserSuccess}
+        </Alert>
+      )}
+
+      {updateUserError && (
+        <Alert color='failure' className='mt-5'>
+          {updateUserError}
+        </Alert>
+      )}
+
     </div>
 //     <div className='max-w-lg mx-auto w-full pl-96  '>
 //         <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>    
