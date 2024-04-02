@@ -7,7 +7,7 @@ import {app} from '../firebase';
 
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import {updateStart, updateSuccess, updateFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure} from '../redux/user/userSlice';
+import {updateStart, updateSuccess, updateFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signoutSuccess} from '../redux/user/userSlice';
 
 
 const DashboardProfile = () => {
@@ -148,6 +148,23 @@ const deleteHandler = async () =>{
     dispatch(deleteUserFailure(error.message));
   }
 }
+
+
+const signoutHandler = async () =>{
+  try {
+    const res = await fetch('/api/user/signout', {
+      method: 'POST',
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data.message);
+    } else {
+      dispatch(signoutSuccess());
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
   return (
     <div className='max-w-lg mx-auto w-full min-h-screen mt-3 md:-mt-16'>
         <h1 className='pb-10 text-center font-semibold text-3xl'>Profile</h1>
@@ -214,7 +231,7 @@ const deleteHandler = async () =>{
         <div className="text-red-500 flex justify-between px-2 mt-3">
             <span className='cursor-pointer' onClick={() => setShowModal(true)}
             >Delete account</span>
-            <span className='cursor-pointer'>Sign Out</span>
+            <span onClick={signoutHandler} className='cursor-pointer'>Sign Out</span>
         </div>
         {updateUserSuccess && (
         <Alert color='success' className='mt-5'>
