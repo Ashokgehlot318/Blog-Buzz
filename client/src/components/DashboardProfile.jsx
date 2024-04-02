@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector} from'react-redux';
 import {getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage';
 import {app} from '../firebase';
+import {Link} from 'react-router-dom'
 
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -224,9 +225,18 @@ const signoutHandler = async () =>{
             onChange={changeHandler}
             />
 
-            <Button type='submit' gradientDuoTone='purpleToBlue' outline>
-                Update
+            <Button type='submit' gradientDuoTone='purpleToBlue' outline disabled={loading || imageFileUrl}>
+                {loading ? "loading..." : 'Update'}
             </Button>
+            {
+              currentUser.isAdmin && (
+                <Link to='/create-post'>
+                  <Button type='button' gradientDuoTone='purpleToPink' className='w-full'>
+                    Create a post
+                  </Button>
+                </Link>
+              )
+            }
         </form>
         <div className="text-red-500 flex justify-between px-2 mt-3">
             <span className='cursor-pointer' onClick={() => setShowModal(true)}
