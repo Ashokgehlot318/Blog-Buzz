@@ -20,10 +20,6 @@ app.use((err, req, res, next) => {
     });
   });
 
-
-const userRouter = require("./routes/user.route");
-const authRouter = require("./routes/auth.route")
-
 Port = 4000;
 
 app.listen(Port, () => {
@@ -40,5 +36,10 @@ mongoose.connect(process.env.DB_URL)
     });
 
 
+const userRouter = require("./routes/user.route");
+const authRouter = require("./routes/auth.route");
+const blogPost = require("./routes/blog-post.route");
+
 app.use("/api/user",userRouter);
 app.use("/api/auth",authRouter);
+app.use("/api/post",blogPost);
