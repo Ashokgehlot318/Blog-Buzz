@@ -1,5 +1,4 @@
 const  Post  = require("../models/blog-post.model");
-const { errorHandler } = require("../utils/error")
 
 exports.create = async (req,res,next) =>{
     if(!req.user.isAdmin){
