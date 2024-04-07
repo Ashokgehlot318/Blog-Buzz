@@ -54,27 +54,27 @@ const DashboardPost = () => {
     }
   };
 
-  // const handleDeletePost = async () => {
-  //   setShowModal(false);
-  //   try {
-  //     const res = await fetch(
-  //       `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
-  //       {
-  //         method: 'DELETE',
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     if (!res.ok) {
-  //       console.log(data.message);
-  //     } else {
-  //       setUserPosts((prev) =>
-  //         prev.filter((post) => post._id !== postIdToDelete)
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
+  const deletePostHandler = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
+        {
+          method: 'DELETE',
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setUserPosts((prev) =>
+          prev.filter((post) => post._id !== postIdToDelete)
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
 
   return (
@@ -118,10 +118,10 @@ const DashboardPost = () => {
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
                     <span
-                      // onClick={() => {
-                      //   setShowModal(true);
-                      //   setPostIdToDelete(post._id);
-                      // }}
+                      onClick={() => {
+                        setShowModal(true);
+                        setPostIdToDelete(post._id);
+                      }}
                       className='font-medium text-red-500 hover:underline cursor-pointer'
                     >
                       Delete
@@ -151,7 +151,7 @@ const DashboardPost = () => {
       ) : (
         <p>You have no posts yet!</p>
       )}
-      {/* <Modal
+      <Modal
         show={showModal}
         onClose={() => setShowModal(false)}
         popup
@@ -165,7 +165,7 @@ const DashboardPost = () => {
               Are you sure you want to delete this post?
             </h3>
             <div className='flex justify-center gap-4'>
-              <Button color='failure' onClick={handleDeletePost}>
+              <Button color='failure' onClick={deletePostHandler}>
                 Yes, I'm sure
               </Button>
               <Button color='gray' onClick={() => setShowModal(false)}>
@@ -174,7 +174,7 @@ const DashboardPost = () => {
             </div>
           </div>
         </Modal.Body>
-      </Modal> */}
+      </Modal>
     </div>
    
   )
