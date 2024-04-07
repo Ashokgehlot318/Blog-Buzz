@@ -86,8 +86,6 @@ export default function UpdatePost() {
 
 
   const submitHandler = async (e) => {
-    console.log(postId)
-    console.log(currentUser._id)
     e.preventDefault();
     try {
       const res = await fetch(`/api/post/updatepost/${postId}/${currentUser._id}`, {
