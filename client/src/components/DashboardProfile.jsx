@@ -167,7 +167,7 @@ const signoutHandler = async () =>{
   }
 }
   return (
-    <div className='max-w-lg mx-auto w-full min-h-screen mt-3 md:-mt-16'>
+    <div className='max-w-lg mx-auto w-full min-h-screen mt-12'>
         <h1 className='pb-10 text-center font-semibold text-3xl'>Profile</h1>
         <form className='flex flex-col gap-4' onSubmit={submitHandler}>
             <input type='file' accept='image/*' hidden onChange={imageChangeHandler} ref={profileRef}></input>

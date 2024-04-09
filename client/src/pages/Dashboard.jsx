@@ -27,10 +27,13 @@ const Dashboard = () => {
 
       {/* right side  */}
 
-      <div className="">
+      <div className="flex-grow ">
+        <div className=" ">
+
         {
           tab === 'profile' && <DashboardProfile />
         }
+        </div>
 
         {
           tab === 'posts' && <DashboardPost />

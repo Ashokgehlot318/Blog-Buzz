@@ -39,7 +39,9 @@ mongoose.connect(process.env.DB_URL)
 const userRouter = require("./routes/user.route");
 const authRouter = require("./routes/auth.route");
 const blogPost = require("./routes/blog-post.route");
+const commentRoute = require("./routes/comment.route");
 
 app.use("/api/user",userRouter);
 app.use("/api/auth",authRouter);
 app.use("/api/post",blogPost);
+app.use("/api/comment",commentRoute);
