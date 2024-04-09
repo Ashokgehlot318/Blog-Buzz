@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 // import Comment from './Comment';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import Comments from './Comments';
 
 export default function CommentSection({ postId }) {
   const { currentUser } = useSelector((state) => state.user);
@@ -41,20 +42,20 @@ export default function CommentSection({ postId }) {
     }
   };
 
-//   useEffect(() => {
-//     const getComments = async () => {
-//       try {
-//         const res = await fetch(`/api/comment/getPostComments/${postId}`);
-//         if (res.ok) {
-//           const data = await res.json();
-//           setComments(data);
-//         }
-//       } catch (error) {
-//         console.log(error.message);
-//       }
-//     };
-//     getComments();
-//   }, [postId]);
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const res = await fetch(`/api/comment/getpostcomments/${postId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setComments(data);
+        }
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    getComments();
+  }, [postId]);
 
 //   const handleLike = async (commentId) => {
 //     try {
@@ -172,18 +173,18 @@ export default function CommentSection({ postId }) {
               <p>{comments.length}</p>
             </div>
           </div>
-          {/* {comments.map((comment) => (
-            // <Comment
-            //   key={comment._id}
-            //   comment={comment}
-            // //   onLike={handleLike}
-            // //   onEdit={handleEdit}
-            // //   onDelete={(commentId) => {
-            // //     setShowModal(true);
-            // //     setCommentToDelete(commentId);
-            // //   }}
-            // />
-          ))} */}
+          {comments.map((comment) => (
+            <Comments
+              key={comment._id}
+              comment={comment}
+              // onLike={handleLike}
+              // onEdit={handleEdit}
+              // onDelete={(commentId) => {
+              //   setShowModal(true);
+              //   setCommentToDelete(commentId);
+              // }}
+            />
+          ))}
         </>
       )}
       {/* <Modal
