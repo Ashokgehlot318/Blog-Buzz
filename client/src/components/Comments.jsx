@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 import { set } from 'mongoose';
 
-export default function Comments({ comment}) { //onLike, onEdit, onDelete 
+export default function Comments({ comment, onLike}) { //onLike, onEdit, onDelete 
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
@@ -63,12 +63,13 @@ export default function Comments({ comment}) { //onLike, onEdit, onDelete
           <span className='font-bold mr-1 text-xs truncate'>
             {user ? `@${user.username}` : 'anonymous user'}
           </span>
-          <span className='text-gray-500 text-xs'> // using moment package
+          {/* // using moment package */}
+          <span className='text-gray-500 text-xs'> 
             {moment(comment.createdAt).fromNow()} 
           </span>
         </div>
           <p className='text-gray-500 pb-2 dark:text-gray-300'>{comment.content}</p>
-        {/* {isEditing ? (
+        {isEditing ? (
           <>
             <Textarea
               className='mb-2'
@@ -97,9 +98,9 @@ export default function Comments({ comment}) { //onLike, onEdit, onDelete
           </>
         ) : (
           <>
-            <p className='text-gray-500 pb-2'>{comment.content}</p>
+            {/* <p className='text-gray-500 pb-2'>{comment.content}</p> */}
             <div className='flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2'>
-              <button
+            <button
                 type='button'
                 onClick={() => onLike(comment._id)}
                 className={`text-gray-400 hover:text-blue-500 ${
@@ -121,14 +122,14 @@ export default function Comments({ comment}) { //onLike, onEdit, onDelete
                   <>
                     <button
                       type='button'
-                      onClick={handleEdit}
+                      // onClick={handleEdit}
                       className='text-gray-400 hover:text-blue-500'
                     >
                       Edit
                     </button>
                     <button
                       type='button'
-                      onClick={() => onDelete(comment._id)}
+                      // onClick={() => onDelete(comment._id)}
                       className='text-gray-400 hover:text-red-500'
                     >
                       Delete
@@ -137,7 +138,7 @@ export default function Comments({ comment}) { //onLike, onEdit, onDelete
                 )}
             </div>
           </>
-        )} */}
+        )}
       </div>
     </div>
   );
