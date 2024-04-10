@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 import { set } from 'mongoose';
 
-export default function Comments({ comment, onLike}) { //onLike, onEdit, onDelete 
+export default function Comments({ comment, onLike, onEdit}) { 
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
@@ -25,30 +25,30 @@ export default function Comments({ comment, onLike}) { //onLike, onEdit, onDelet
     getUser();
   }, [comment]);
 
-//   const handleEdit = () => {
-//     setIsEditing(true);
-//     setEditedContent(comment.content);
-//   };
+  const editHandler = () => {
+    setIsEditing(true);
+    setEditedContent(comment.content);
+  };
 
-//   const handleSave = async () => {
-//     try {
-//       const res = await fetch(`/api/comment/editComment/${comment._id}`, {
-//         method: 'PUT',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           content: editedContent,
-//         }),
-//       });
-//       if (res.ok) {
-//         setIsEditing(false);
-//         onEdit(comment, editedContent);
-//       }
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   };
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`/api/comment/editComment/${comment._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: editedContent,
+        }),
+      });
+      if (res.ok) {
+        setIsEditing(false);
+        onEdit(comment, editedContent);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <div className='flex p-4 border-b dark:border-gray-600 text-sm'>
       <div className='flex-shrink-0 mr-3'>
@@ -68,7 +68,7 @@ export default function Comments({ comment, onLike}) { //onLike, onEdit, onDelet
             {moment(comment.createdAt).fromNow()} 
           </span>
         </div>
-          <p className='text-gray-500 pb-2 dark:text-gray-300'>{comment.content}</p>
+          {/* <p className='text-gray-500 pb-2 dark:text-gray-300'>{comment.content}</p> */}
         {isEditing ? (
           <>
             <Textarea
@@ -88,7 +88,7 @@ export default function Comments({ comment, onLike}) { //onLike, onEdit, onDelet
               <Button
                 type='button'
                 size='sm'
-                gradientDuoTone='purpleToBlue'
+                gradientDuoTone='purpleToPink'
                 outline
                 onClick={() => setIsEditing(false)}
               >
@@ -98,7 +98,7 @@ export default function Comments({ comment, onLike}) { //onLike, onEdit, onDelet
           </>
         ) : (
           <>
-            {/* <p className='text-gray-500 pb-2'>{comment.content}</p> */}
+            <p className='text-gray-800 pb-2 dark:text-gray-300'>{comment.content}</p>
             <div className='flex items-center pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2'>
             <button
                 type='button'
@@ -122,7 +122,7 @@ export default function Comments({ comment, onLike}) { //onLike, onEdit, onDelet
                   <>
                     <button
                       type='button'
-                      // onClick={handleEdit}
+                      onClick={editHandler}
                       className='text-gray-400 hover:text-blue-500'
                     >
                       Edit
