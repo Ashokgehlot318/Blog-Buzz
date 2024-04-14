@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Button, Textarea } from 'flowbite-react';
 import { set } from 'mongoose';
 
-export default function Comments({ comment, onLike, onEdit}) { 
+export default function Comments({ comment, onLike, onEdit, onDelete}) { 
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(comment.content);
@@ -129,7 +129,7 @@ export default function Comments({ comment, onLike, onEdit}) {
                     </button>
                     <button
                       type='button'
-                      // onClick={() => onDelete(comment._id)}
+                      onClick={() => onDelete(comment._id)}
                       className='text-gray-400 hover:text-red-500'
                     >
                       Delete

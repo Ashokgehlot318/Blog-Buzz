@@ -93,24 +93,25 @@ export default function CommentSection({ postId }) {
     );
   };
 
-//   const handleDelete = async (commentId) => {
-//     setShowModal(false);
-//     try {
-//       if (!currentUser) {
-//         navigate('/sign-in');
-//         return;
-//       }
-//       const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
-//         method: 'DELETE',
-//       });
-//       if (res.ok) {
-//         const data = await res.json();
-//         setComments(comments.filter((comment) => comment._id !== commentId));
-//       }
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   };
+  const deleteHandler = async (commentId) => {
+    setShowModal(false);
+    try {
+      if (!currentUser) {
+        navigate('/sign-in');
+        return;
+      }
+      const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(comments.filter((comment) => comment._id !== commentId));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className='max-w-2xl mx-auto w-full p-3'>
       {currentUser ? (
@@ -179,15 +180,15 @@ export default function CommentSection({ postId }) {
               comment={comment}
               onLike={likeHandler}
               onEdit={editHandler}
-              // onDelete={(commentId) => {
-              //   setShowModal(true);
-              //   setCommentToDelete(commentId);
-              // }}
+              onDelete={(commentId) => {
+                setShowModal(true);
+                setCommentToDelete(commentId);
+              }}
             />
           ))}
         </>
       )}
-      {/* <Modal
+      <Modal
         show={showModal}
         onClose={() => setShowModal(false)}
         popup
@@ -203,7 +204,7 @@ export default function CommentSection({ postId }) {
             <div className='flex justify-center gap-4'>
               <Button
                 color='failure'
-                onClick={() => handleDelete(commentToDelete)}
+                onClick={() => deleteHandler(commentToDelete)}
               >
                 Yes, I'm sure
               </Button>
@@ -213,7 +214,7 @@ export default function CommentSection({ postId }) {
             </div>
           </div>
         </Modal.Body>
-      </Modal> */}
+      </Modal>
     </div>
   );
 }
