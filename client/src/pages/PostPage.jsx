@@ -95,9 +95,9 @@ console.log(postslug)
      
       <CommentSection postId={post._id} />
 
-      <div className='flex flex-col justify-center items-center mb-5 '>
+      <div className='max-w-8xl mx-auto flex flex-col justify-center items-center mb-5 '>
         <h1 className='text-xl mt-5'>Recent articles</h1>
-        <div className='flex flex-wrap gap-3 mt-5 justify-center max-w-6xl sm:flex-row'>
+        <div className='flex flex-col sm:flex-wrap gap-3 mt-5 justify-center max-w-6xl sm:flex-row'>
           {recentPosts &&
             recentPosts.map((post) => <RecentPostCard key={post._id} post={post} />)}
         </div>
