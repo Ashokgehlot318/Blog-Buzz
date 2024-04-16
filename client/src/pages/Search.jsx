@@ -144,7 +144,7 @@ export default function Search() {
         </form>
       </div>
       <div className='w-full'>
-        <h1 className='text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-1 '>
+        <h1 className='text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5 md:mt-3 '>
           Posts results:
         </h1>
         <div className='p-7 flex flex-wrap gap-4'>
