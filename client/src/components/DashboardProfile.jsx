@@ -56,7 +56,7 @@ const DashboardProfile = () => {
             const progress =
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     
-            setImageFileUploadProgress(progress.toFixed(0));
+            setImageFileUploadProgress(Math.round(progress));
           },
           (error) => {
             setImageFileUploadError(
@@ -77,6 +77,30 @@ const DashboardProfile = () => {
           }
         );
       };
+
+    // const  imageUpload= (file) => {
+    //   const storage = getStorage(app);
+    //   const fileName = new Date().getTime() + file.name;
+    //   const storageRef = ref(storage, fileName);
+    //   const uploadTask = uploadBytesResumable(storageRef, file);
+  
+    //   uploadTask.on(
+    //     'state_changed',
+    //     (snapshot) => {
+    //       const progress =
+    //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //         setFilePercentage(Math.round(progress));
+    //     },
+    //     (error) => {
+    //       setFileUploadError(true);
+    //     },
+    //     () => {
+    //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+    //         setFormData({ ...formData, avatar: downloadURL })
+    //       );
+    //     }
+    //   );
+    // };
 
 // google storage rules
     // service firebase.storage {
@@ -225,7 +249,7 @@ const signoutHandler = async () =>{
             onChange={changeHandler}
             />
 
-            <Button type='submit' gradientDuoTone='purpleToBlue' outline disabled={loading || imageFileUrl}>
+            <Button type='submit' gradientDuoTone='purpleToBlue' outline disabled={loading }>
                 {loading ? "loading..." : 'Update'}
             </Button>
             {

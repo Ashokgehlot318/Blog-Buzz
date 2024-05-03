@@ -49,9 +49,7 @@ const Dashboard = () => {
         }
 
         {
-          <div className="">
             tab === 'dashboard' && <DashboardComponent />
-          </div>
         }
 
       </div>

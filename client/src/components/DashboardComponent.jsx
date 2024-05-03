@@ -128,7 +128,7 @@ export default function DashboardComponent() {
               <Link to={'/dashboard?tab=users'}>See all</Link>
             </Button>
           </div>
-          <Table hoverable>
+          <Table hoverable className='flex-1 w-96'>
             <Table.Head>
               <Table.HeadCell>User image</Table.HeadCell>
               <Table.HeadCell>Username</Table.HeadCell>
@@ -150,6 +150,7 @@ export default function DashboardComponent() {
               ))}
           </Table>
         </div>
+
         <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
             <h1 className='text-center p-2'>Recent comments</h1>
@@ -157,7 +158,7 @@ export default function DashboardComponent() {
               <Link to={'/dashboard?tab=comments'}>See all</Link>
             </Button>
           </div>
-          <Table hoverable>
+          <Table hoverable className='flex-1 w-full'>
             <Table.Head>
               <Table.HeadCell>Comment content</Table.HeadCell>
               <Table.HeadCell>Likes</Table.HeadCell>
